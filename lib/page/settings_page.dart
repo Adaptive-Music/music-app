@@ -12,8 +12,7 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appSettings = ref.read(appSettingsProvider);
-    print(appSettings);
+    final appSettings = ref.watch(appSettingsProvider);
     selectedInstrument = appSettings.instrument;
     selectedKeyCentre = appSettings.keyCentre;
     selectedOctave = appSettings.octave;

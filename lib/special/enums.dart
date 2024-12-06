@@ -43,7 +43,7 @@ enum KeyCentre {
 
   static int getKey(String name) {
     return KeyCentre.values
-        .firstWhere((keyCenter) => keyCenter.name == name)
+        .firstWhere((keyCentre) => keyCentre.name == name)
         .key;
   }
 }
