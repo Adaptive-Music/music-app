@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/special/enums.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:music_app/special/app_settings_service.dart';
 
 // Model class for app settings
 class AppSettings {
@@ -25,3 +27,20 @@ const defaultSettings = AppSettings(
   playingMode: PlayingMode.singleNote,
 );
 
+// StateNotifier class for app settings
+class AppSettingsNotifier extends StateNotifier<AppSettings> {
+  AppSettingsNotifier() : super(defaultSettings) {
+    _loadFromPrefs();
+  }
+
+  Future<void> _loadFromPrefs() async {
+    final service = AppSettingsService();
+    state = await service.loadSettings();
+  }
+
+  void saveSettings(AppSettings settings) {
+    final service = AppSettingsService();
+    service.saveSettings(settings);
+    state = settings;
+  }
+}
