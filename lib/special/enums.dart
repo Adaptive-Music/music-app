@@ -98,3 +98,10 @@ enum Instrument {
     return last[0].toUpperCase() + last.substring(1);
   }
 }
+
+enum PlayingMode {
+  singleNote,
+  triadChord,
+  powerChord,
+  ;
+}
