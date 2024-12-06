@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/special/app_settings.dart';
 import 'package:music_app/special/enums.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends ConsumerWidget {
   late Instrument selectedInstrument;
@@ -14,6 +13,7 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appSettings = ref.read(appSettingsProvider);
+    print(appSettings);
     selectedInstrument = appSettings.instrument;
     selectedKeyCentre = appSettings.keyCentre;
     selectedOctave = appSettings.octave;
@@ -42,7 +42,7 @@ class SettingsPage extends ConsumerWidget {
                               ))
                           .toList(),
                       onChanged: (newValue) {
-                          selectedInstrument = newValue!;
+                        selectedInstrument = newValue!;
                       },
                     ),
                     SizedBox(height: 16),
@@ -102,32 +102,30 @@ class SettingsPage extends ConsumerWidget {
                       },
                     ),
                     SizedBox(height: 32),
-
                   ],
                 ),
               ),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
                 ref.read(appSettingsProvider.notifier).saveSettings(
-                  AppSettings(
-                    keyCentre: selectedKeyCentre,
-                    scale: selectedScale,
-                    octave: selectedOctave,
-                    instrument: selectedInstrument,
-                    playingMode: selectedPlayingMode,
-                  ),
-                );
+                      AppSettings(
+                        keyCentre: selectedKeyCentre,
+                        scale: selectedScale,
+                        octave: selectedOctave,
+                        instrument: selectedInstrument,
+                        playingMode: selectedPlayingMode,
+                      ),
+                    );
                 Navigator.pop(context);
               },
               child: Text('Save Settings'),
             ),
           ),
-        ],  
+        ],
       ),
     );
   }

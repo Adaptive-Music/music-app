@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/page/settings_page.dart';
-import 'package:music_app/special/app_settings.dart';
-import 'package:music_app/special/enums.dart';
 
 void main() {
   runApp(ProviderScope(child: MyApp()));

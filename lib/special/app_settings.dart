@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/special/enums.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:music_app/special/app_settings_service.dart';
 
 // Model class for app settings
@@ -19,6 +17,11 @@ class AppSettings {
     required this.instrument,
     required this.playingMode,
   });
+
+  @override
+  String toString() {
+    return 'AppSettings{keyCentre: $keyCentre, scale: $scale, octave: $octave, instrument: $instrument, playingMode: $playingMode}';
+  }
 }
 
 // Default settings
@@ -32,18 +35,18 @@ const defaultSettings = AppSettings(
 
 // StateNotifier class for app settings
 class AppSettingsNotifier extends StateNotifier<AppSettings> {
+  final AppSettingsService _service = AppSettingsService();
+
   AppSettingsNotifier() : super(defaultSettings) {
     _loadFromPrefs();
   }
 
   Future<void> _loadFromPrefs() async {
-    final service = AppSettingsService();
-    state = await service.loadSettings();
+    state = await _service.loadSettings();
   }
 
   void saveSettings(AppSettings settings) {
-    final service = AppSettingsService();
-    service.saveSettings(settings);
+    _service.saveSettings(settings);
     state = settings;
   }
 }
