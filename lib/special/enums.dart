@@ -19,7 +19,7 @@ enum Scale {
   }
 }
 
-enum KeyCenter {
+enum KeyCentre {
   cNat(name: 'C', key: 0),
   cSh(name: 'C# / Db', key: 1),
   dNat(name: 'D', key: 2),
@@ -33,7 +33,7 @@ enum KeyCenter {
   aSh(name: 'A# / Bb', key: 10),
   bNat(name: 'B', key: 11);
 
-  const KeyCenter({
+  const KeyCentre({
     required this.name,
     required this.key,
   });
@@ -42,7 +42,7 @@ enum KeyCenter {
   final int key;
 
   static int getKey(String name) {
-    return KeyCenter.values
+    return KeyCentre.values
         .firstWhere((keyCenter) => keyCenter.name == name)
         .key;
   }
