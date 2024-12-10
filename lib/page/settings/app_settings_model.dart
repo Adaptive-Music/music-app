@@ -1,6 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/special/enums.dart';
-import 'package:music_app/page/settings/app_settings_service.dart';
 
 // Model class for app settings
 class AppSettings {
@@ -24,13 +22,6 @@ class AppSettings {
   }
 }
 
-// Default settings
-const defaultSettings = AppSettings(
-  keyCentre: KeyCentre.cNat,
-  scale: Scale.major,
-  octave: Octave.four,
-  instrument: Instrument.piano,
-  playingMode: PlayingMode.singleNote,
-);
+
 
 

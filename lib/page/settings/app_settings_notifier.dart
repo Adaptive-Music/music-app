@@ -3,12 +3,15 @@ import 'package:music_app/page/settings/app_settings_model.dart';
 import 'package:music_app/page/settings/app_settings_service.dart';
 
 
-// StateNotifier class for app settings
-class AppSettingsNotifier extends StateNotifier<AppSettings> {
+// Notifier class for app settings
+class AppSettingsNotifier extends Notifier<AppSettings> {
   final AppSettingsService _service = AppSettingsService();
 
-  AppSettingsNotifier() : super(defaultSettings) {
+  @override
+  AppSettings build() {
+    // Initialize the settings with default values
     _loadFromPrefs();
+    return defaultSettings;
   }
 
   Future<void> _loadFromPrefs() async {
@@ -22,7 +25,11 @@ class AppSettingsNotifier extends StateNotifier<AppSettings> {
 }
 
 // Provider for AppSettingsNotifier
-final appSettingsProvider =
-    StateNotifierProvider<AppSettingsNotifier, AppSettings>(
-  (ref) => AppSettingsNotifier(),
+final appSettingsProvider = NotifierProvider<AppSettingsNotifier, AppSettings>(
+  AppSettingsNotifier.new,
 );
+
+
+
+
+

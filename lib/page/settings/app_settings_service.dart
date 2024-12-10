@@ -53,3 +53,11 @@ class AppSettingsService {
     print('Saved settings: $settings');
   }
 }
+
+const defaultSettings = AppSettings(
+  keyCentre: KeyCentre.cNat,
+  scale: Scale.major,
+  octave: Octave.four,
+  instrument: Instrument.piano,
+  playingMode: PlayingMode.singleNote,
+);
