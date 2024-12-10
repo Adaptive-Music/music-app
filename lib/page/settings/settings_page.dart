@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:music_app/special/app_settings.dart';
+import 'package:music_app/page/settings/app_settings_model.dart';
+import 'package:music_app/page/settings/app_settings_notifier.dart';
 import 'package:music_app/special/enums.dart';
 
 class SettingsPage extends ConsumerWidget {
