@@ -24,14 +24,14 @@ class AppSettingsService {
       (e) => e.name == _prefs?.getString('instrument'),
       orElse: () => defaultSettings.instrument,
     );
-    final playingMode = PlayingMode.values.firstWhere(
-      (e) => e.name == _prefs?.getString('playingMode'),
-      orElse: () => defaultSettings.playingMode,
-    );
     final scale = Scale.values.firstWhere(
       (e) => e.name == _prefs?.getString('scale'),
       orElse: () => defaultSettings.scale,
     );
+    final playingMode = (scale.name != Scale.pentatonicMajor.name && scale.name != Scale.pentatonicMinor.name) ? (PlayingMode.values.firstWhere(
+      (e) => e.name == _prefs?.getString('playingMode'),
+      orElse: () => defaultSettings.playingMode,)) : PlayingMode.singleNote;
+    
 
     AppSettings settings = AppSettings(
       keyCentre: keyCenter,
