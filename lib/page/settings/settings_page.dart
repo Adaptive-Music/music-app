@@ -11,6 +11,12 @@ class SettingsPage extends ConsumerWidget {
   late Scale selectedScale;
   late PlayingMode selectedPlayingMode;
 
+  late List<Instrument> dropdownInstruments;
+  late List<KeyCentre> dropdownKeys;
+  late List<Octave> dropdownOctaves;
+  late List<Scale> dropdownScales;
+  late List<PlayingMode> dropdownPlayingModes;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appSettings = ref.watch(appSettingsProvider);
@@ -19,6 +25,13 @@ class SettingsPage extends ConsumerWidget {
     selectedOctave = appSettings.octave;
     selectedScale = appSettings.scale;
     selectedPlayingMode = appSettings.playingMode;
+
+    dropdownInstruments = Instrument.values;
+    dropdownKeys = KeyCentre.values;
+    dropdownOctaves = Octave.values;
+    dropdownScales = Scale.values;
+    dropdownPlayingModes = PlayingMode.values;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -35,7 +48,7 @@ class SettingsPage extends ConsumerWidget {
                     DropdownButtonFormField<Instrument>(
                       decoration: InputDecoration(labelText: 'Instrument'),
                       value: selectedInstrument,
-                      items: Instrument.values
+                      items: dropdownInstruments
                           .map((instrument) => DropdownMenuItem(
                                 value: instrument,
                                 child: Text(instrument.name),
@@ -49,7 +62,7 @@ class SettingsPage extends ConsumerWidget {
                     DropdownButtonFormField<KeyCentre>(
                       decoration: InputDecoration(labelText: 'Key Centre'),
                       value: selectedKeyCentre,
-                      items: KeyCentre.values
+                      items: dropdownKeys
                           .map((keyCentre) => DropdownMenuItem(
                                 value: keyCentre,
                                 child: Text(keyCentre.name),
@@ -63,7 +76,7 @@ class SettingsPage extends ConsumerWidget {
                     DropdownButtonFormField<Scale>(
                       decoration: InputDecoration(labelText: 'Scale'),
                       value: selectedScale,
-                      items: Scale.values
+                      items: dropdownScales
                           .map((scale) => DropdownMenuItem(
                                 value: scale,
                                 child: Text(scale.name),
@@ -77,7 +90,7 @@ class SettingsPage extends ConsumerWidget {
                     DropdownButtonFormField<Octave>(
                       decoration: InputDecoration(labelText: 'Octave'),
                       value: selectedOctave,
-                      items: Octave.values
+                      items: dropdownOctaves
                           .map((octave) => DropdownMenuItem(
                                 value: octave,
                                 child: Text(octave.name),
@@ -91,7 +104,7 @@ class SettingsPage extends ConsumerWidget {
                     DropdownButtonFormField<PlayingMode>(
                       decoration: InputDecoration(labelText: 'Keyboard Mode'),
                       value: selectedPlayingMode,
-                      items: PlayingMode.values
+                      items: dropdownPlayingModes
                           .map((playingMode) => DropdownMenuItem(
                                 value: playingMode,
                                 child: Text(playingMode.name),

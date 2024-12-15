@@ -32,6 +32,7 @@ class AppSettingsService {
       (e) => e.name == _prefs?.getString('scale'),
       orElse: () => defaultSettings.scale,
     );
+
     AppSettings settings = AppSettings(
       keyCentre: keyCenter,
       scale: scale,
@@ -53,6 +54,12 @@ class AppSettingsService {
     print('Saved settings: $settings');
   }
 }
+
+// updatePlaymodeDrop (String selectedScale) {
+//   if (seletedPlaymode == '') {
+
+//   }
+// }
 
 const defaultSettings = AppSettings(
   keyCentre: KeyCentre.cNat,

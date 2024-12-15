@@ -100,8 +100,15 @@ enum Instrument {
 }
 
 enum PlayingMode {
-  singleNote,
-  triadChord,
-  powerChord,
-  ;
+  singleNote(name:'Single Note'),
+  triadChord(name:'Triad Chord'),
+  powerChord(name:'Power Chord');
+
+  const PlayingMode({
+    required this.name
+  });
+  
+  final String name;
+
+  
 }
