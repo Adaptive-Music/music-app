@@ -2,35 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/page/settings/app_settings_model.dart';
 import 'package:music_app/page/settings/app_settings_notifier.dart';
+import 'package:music_app/page/settings/app_settings_service.dart';
 import 'package:music_app/special/enums.dart';
 
-class SettingsPage extends ConsumerWidget {
+class SettingsPage extends ConsumerStatefulWidget {
+  const SettingsPage({super.key});
+
+  @override
+  ConsumerState<SettingsPage> createState() => _SettingsPageState();
+}
+
+
+class _SettingsPageState extends ConsumerState<SettingsPage> {
   late Instrument selectedInstrument;
   late KeyCentre selectedKeyCentre;
   late Octave selectedOctave;
   late Scale selectedScale;
   late PlayingMode selectedPlayingMode;
 
-  late List<Instrument> dropdownInstruments;
-  late List<KeyCentre> dropdownKeys;
-  late List<Octave> dropdownOctaves;
-  late List<Scale> dropdownScales;
-  late List<PlayingMode> dropdownPlayingModes;
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final appSettings = ref.watch(appSettingsProvider);
+  void initState() {
+    super.initState();  
+    final appSettings = ref.read(appSettingsProvider);
     selectedInstrument = appSettings.instrument;
     selectedKeyCentre = appSettings.keyCentre;
     selectedOctave = appSettings.octave;
     selectedScale = appSettings.scale;
     selectedPlayingMode = appSettings.playingMode;
+  }
 
-    dropdownInstruments = Instrument.values;
-    dropdownKeys = KeyCentre.values;
-    dropdownOctaves = Octave.values;
-    dropdownScales = Scale.values;
-    dropdownPlayingModes = PlayingMode.values;
+  @override
+  Widget build(BuildContext context) {
+
+    List<Instrument> dropdownInstruments = Instrument.values;
+    List<KeyCentre> dropdownKeys = KeyCentre.values;
+    List<Octave> dropdownOctaves = Octave.values;
+    List<Scale> dropdownScales = Scale.values;
+    List<PlayingMode> dropdownPlayingModes = updateModeDrop(selectedScale);
+
+    selectedPlayingMode = updateModeSelect(selectedScale, selectedPlayingMode);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +65,9 @@ class SettingsPage extends ConsumerWidget {
                               ))
                           .toList(),
                       onChanged: (newValue) {
-                        selectedInstrument = newValue!;
+                        setState(() {
+                          selectedInstrument = newValue!;
+                        });
                       },
                     ),
                     SizedBox(height: 16),
@@ -69,7 +81,9 @@ class SettingsPage extends ConsumerWidget {
                               ))
                           .toList(),
                       onChanged: (newValue) {
-                        selectedKeyCentre = newValue!;
+                        setState(() {
+                          selectedKeyCentre = newValue!;
+                        });
                       },
                     ),
                     SizedBox(height: 16),
@@ -83,7 +97,11 @@ class SettingsPage extends ConsumerWidget {
                               ))
                           .toList(),
                       onChanged: (newValue) {
+                        setState(() {
+                          
+                        });
                         selectedScale = newValue!;
+                        selectedPlayingMode = updateModeSelect(selectedScale, selectedPlayingMode);
                       },
                     ),
                     SizedBox(height: 16),
@@ -97,7 +115,11 @@ class SettingsPage extends ConsumerWidget {
                               ))
                           .toList(),
                       onChanged: (newValue) {
-                        selectedOctave = newValue!;
+                        setState((){
+                          setState((){
+                            selectedOctave = newValue!;
+                          });
+                        });
                       },
                     ),
                     SizedBox(height: 16),
@@ -111,7 +133,9 @@ class SettingsPage extends ConsumerWidget {
                               ))
                           .toList(),
                       onChanged: (newValue) {
-                        selectedPlayingMode = newValue!;
+                        setState((){
+                          selectedPlayingMode = newValue!;
+                        });
                       },
                     ),
                     SizedBox(height: 32),

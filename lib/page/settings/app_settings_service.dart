@@ -55,11 +55,22 @@ class AppSettingsService {
   }
 }
 
-// updatePlaymodeDrop (String selectedScale) {
-//   if (seletedPlaymode == '') {
+List<PlayingMode> updateModeDrop (Scale selectedScale) {
+  if (selectedScale.name == Scale.pentatonicMajor.name || selectedScale.name == Scale.pentatonicMinor.name) {
+    print('Compared selected Scale is $selectedScale.name');
+    print('2 Modes');
+    return PlayingMode.values.where((mode) => mode.name != 'Triad Chord').toList();
+  }
+  print('3 Modes');
+  return PlayingMode.values;
+}
 
-//   }
-// }
+PlayingMode updateModeSelect (Scale selectedScale, PlayingMode selectedPlayingMode) {
+  if (selectedScale.name == Scale.pentatonicMajor.name || selectedScale.name == Scale.pentatonicMinor.name) {
+    return (selectedPlayingMode.name == PlayingMode.triadChord.name) ? PlayingMode.singleNote : selectedPlayingMode;
+  }
+  return selectedPlayingMode;
+}
 
 const defaultSettings = AppSettings(
   keyCentre: KeyCentre.cNat,
