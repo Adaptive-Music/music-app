@@ -98,10 +98,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          
+                          selectedScale = newValue!;
+                          selectedPlayingMode = updateModeSelect(selectedScale, selectedPlayingMode);
                         });
-                        selectedScale = newValue!;
-                        selectedPlayingMode = updateModeSelect(selectedScale, selectedPlayingMode);
                       },
                     ),
                     SizedBox(height: 16),
