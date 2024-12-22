@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:music_app/special/enums.dart';
-import 'package:music_app/page/settings/app_settings_model.dart';
+import 'package:music_app/component/settings/app_settings_model.dart';
 
 // Service class to handle saving and loading app settings
 class AppSettingsService {

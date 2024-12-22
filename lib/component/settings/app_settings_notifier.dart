@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:music_app/page/settings/app_settings_model.dart';
-import 'package:music_app/page/settings/app_settings_service.dart';
+import 'package:music_app/component/settings/app_settings_model.dart';
+import 'package:music_app/component/settings/app_settings_service.dart';
 
 
 // Notifier class for app settings
