@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:music_app/special/enums.dart';
-import 'package:music_app/component/playScreen/keyboard/key/note_model.dart';
+import 'package:music_app/component/playScreen/keyboard/note/note_model.dart';
 
 class NoteController {
   final Note note;
