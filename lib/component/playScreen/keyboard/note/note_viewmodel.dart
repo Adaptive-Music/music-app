@@ -1,10 +1,10 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show HapticFeedback, Offset, Rect;
 import 'package:music_app/component/playScreen/keyboard/note/note_model.dart';
 
-class NoteController {
+class NoteViewModel {
   final Note note;
 
-  NoteController(this.note);
+  NoteViewModel(this.note);
 
   bool playing = false;
   late Rect bounds;

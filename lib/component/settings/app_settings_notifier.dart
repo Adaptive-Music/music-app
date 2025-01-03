@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/component/settings/app_settings_model.dart';
-import 'package:music_app/component/settings/app_settings_controller.dart';
+import 'package:music_app/component/settings/app_settings_service.dart';
 
 
 // Notifier class for app settings
 class AppSettingsNotifier extends Notifier<AppSettings> {
-  final AppSettingsController _controller = AppSettingsController();
+  final AppSettingsService _controller = AppSettingsService();
 
   @override
   AppSettings build() {

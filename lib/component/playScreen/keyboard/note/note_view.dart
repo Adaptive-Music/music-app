@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
-import 'package:music_app/component/playScreen/keyboard/note/note_controller.dart';
+import 'package:music_app/component/playScreen/keyboard/note/note_viewmodel.dart';
 
 class NoteView extends StatefulWidget {
-  final NoteController controller;
+  final NoteViewModel viewModel;
 
-  const NoteView({super.key, required this.controller});
+  const NoteView({super.key, required this.viewModel});
 
   @override
   State<NoteView> createState() => _NoteViewState();

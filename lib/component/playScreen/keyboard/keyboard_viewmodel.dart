@@ -1,10 +1,10 @@
 
 import 'package:music_app/component/playScreen/keyboard/keyboard_model.dart';
 
-class KeyboardController {
+class KeyboardViewModel {
   final Keyboard keyboard;
 
-  KeyboardController(this.keyboard);
+  KeyboardViewModel(this.keyboard);
 
   List<int> packNotes(int index, int startNote) {
     List<int> notes = [];

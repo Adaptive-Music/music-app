@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:music_app/component/settings/app_settings_model.dart';
 import 'package:music_app/component/settings/app_settings_notifier.dart';
-import 'package:music_app/component/settings/app_settings_controller.dart';
+import 'package:music_app/component/settings/app_settings_utils.dart';
 import 'package:music_app/special/enums.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -14,21 +14,21 @@ class SettingsPage extends ConsumerStatefulWidget {
 
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
-  late Instrument selectedInstrument;
-  late KeyCentre selectedKeyCentre;
-  late Octave selectedOctave;
-  late Scale selectedScale;
-  late PlayingMode selectedPlayingMode;
+
+  late AppSettings selectedSettings;
 
   @override
   void initState() {
     super.initState();  
     final appSettings = ref.read(appSettingsProvider);
-    selectedInstrument = appSettings.instrument;
-    selectedKeyCentre = appSettings.keyCentre;
-    selectedOctave = appSettings.octave;
-    selectedScale = appSettings.scale;
-    selectedPlayingMode = appSettings.playingMode;
+
+    selectedSettings = AppSettings(
+                        keyCentre: appSettings.keyCentre,
+                        scale: appSettings.scale,
+                        octave: appSettings.octave,
+                        instrument: appSettings.instrument,
+                        playingMode: appSettings.playingMode,
+                      );
   }
 
   @override
@@ -38,13 +38,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     List<KeyCentre> dropdownKeys = KeyCentre.values;
     List<Octave> dropdownOctaves = Octave.values;
     List<Scale> dropdownScales = Scale.values;
-    List<PlayingMode> dropdownPlayingModes = updateModeDrop(selectedScale);
+    List<PlayingMode> dropdownPlayingModes = updateModeDrop(selectedSettings.scale);
 
-    selectedPlayingMode = updateModeSelect(selectedScale, selectedPlayingMode);
+    selectedSettings.playingMode = updateModeSelect(selectedSettings.scale, selectedSettings.playingMode);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: const Text('Settings'),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -56,8 +56,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 child: Column(
                   children: [
                     DropdownButtonFormField<Instrument>(
-                      decoration: InputDecoration(labelText: 'Instrument'),
-                      value: selectedInstrument,
+                      decoration: const InputDecoration(labelText: 'Instrument'),
+                      value: selectedSettings.instrument,
                       items: dropdownInstruments
                           .map((instrument) => DropdownMenuItem(
                                 value: instrument,
@@ -66,14 +66,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          selectedInstrument = newValue!;
+                          selectedSettings.instrument = newValue!;
                         });
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<KeyCentre>(
-                      decoration: InputDecoration(labelText: 'Key Centre'),
-                      value: selectedKeyCentre,
+                      decoration: const InputDecoration(labelText: 'Key Centre'),
+                      value: selectedSettings.keyCentre,
                       items: dropdownKeys
                           .map((keyCentre) => DropdownMenuItem(
                                 value: keyCentre,
@@ -82,14 +82,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          selectedKeyCentre = newValue!;
+                          selectedSettings.keyCentre = newValue!;
                         });
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<Scale>(
-                      decoration: InputDecoration(labelText: 'Scale'),
-                      value: selectedScale,
+                      decoration: const InputDecoration(labelText: 'Scale'),
+                      value: selectedSettings.scale,
                       items: dropdownScales
                           .map((scale) => DropdownMenuItem(
                                 value: scale,
@@ -98,15 +98,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .toList(),
                       onChanged: (newValue) {
                         setState(() {
-                          selectedScale = newValue!;
-                          selectedPlayingMode = updateModeSelect(selectedScale, selectedPlayingMode);
+                          selectedSettings.scale = newValue!;
+                          selectedSettings.playingMode = updateModeSelect(selectedSettings.scale, selectedSettings.playingMode);
                         });
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<Octave>(
-                      decoration: InputDecoration(labelText: 'Octave'),
-                      value: selectedOctave,
+                      decoration: const InputDecoration(labelText: 'Octave'),
+                      value: selectedSettings.octave,
                       items: dropdownOctaves
                           .map((octave) => DropdownMenuItem(
                                 value: octave,
@@ -116,15 +116,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       onChanged: (newValue) {
                         setState((){
                           setState((){
-                            selectedOctave = newValue!;
+                            selectedSettings.octave = newValue!;
                           });
                         });
                       },
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     DropdownButtonFormField<PlayingMode>(
-                      decoration: InputDecoration(labelText: 'Keyboard Mode'),
-                      value: selectedPlayingMode,
+                      decoration: const InputDecoration(labelText: 'Keyboard Mode'),
+                      value: selectedSettings.playingMode,
                       items: dropdownPlayingModes
                           .map((playingMode) => DropdownMenuItem(
                                 value: playingMode,
@@ -133,11 +133,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .toList(),
                       onChanged: (newValue) {
                         setState((){
-                          selectedPlayingMode = newValue!;
+                          selectedSettings.playingMode = newValue!;
                         });
                       },
                     ),
-                    SizedBox(height: 32),
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
@@ -149,16 +149,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               onPressed: () {
                 ref.read(appSettingsProvider.notifier).saveSettings(
                       AppSettings(
-                        keyCentre: selectedKeyCentre,
-                        scale: selectedScale,
-                        octave: selectedOctave,
-                        instrument: selectedInstrument,
-                        playingMode: selectedPlayingMode,
+                        keyCentre: selectedSettings.keyCentre,
+                        scale: selectedSettings.scale,
+                        octave: selectedSettings.octave,
+                        instrument: selectedSettings.instrument,
+                        playingMode: selectedSettings.playingMode,
                       ),
                     );
                 Navigator.pop(context);
               },
-              child: Text('Save Settings'),
+              child: const Text('Save Settings'),
             ),
           ),
         ],
