@@ -115,9 +115,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           .toList(),
                       onChanged: (newValue) {
                         setState((){
-                          setState((){
-                            selectedSettings.octave = newValue!;
-                          });
+                          selectedSettings.octave = newValue!;
                         });
                       },
                     ),
@@ -147,15 +145,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
-                ref.read(appSettingsProvider.notifier).saveSettings(
-                      AppSettings(
-                        keyCentre: selectedSettings.keyCentre,
-                        scale: selectedSettings.scale,
-                        octave: selectedSettings.octave,
-                        instrument: selectedSettings.instrument,
-                        playingMode: selectedSettings.playingMode,
-                      ),
-                    );
+                ref.read(appSettingsProvider.notifier).saveSettings(selectedSettings);
                 Navigator.pop(context);
               },
               child: const Text('Save Settings'),
