@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:music_app/component/settings/app_settings_model.dart';
 import 'package:music_app/component/settings/app_settings_service.dart';
@@ -114,26 +116,33 @@ void main() {
   });
 
 
-  group('AppSettings Service', () async {
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  group('AppSettings Service', () {
+    SharedPreferences.setMockInitialValues({});
+    SharedPreferences prefs;
     
-    final phKeyCenter = KeyCentre.values.firstWhere(
-      (e) => e.name == prefs.getString('keyCentre'));
-    final phOctave = Octave.values.firstWhere(
-      (e) => e.name == prefs.getString('octave'));
-    final phInstrument = Instrument.values.firstWhere(
-      (e) => e.name == prefs.getString('instrument'));
-    final phScale = Scale.values.firstWhere(
-      (e) => e.name == prefs.getString('scale'));
-    final phPlayingMode = PlayingMode.values.firstWhere(
-      (e) => e.name == prefs.getString('playingMode'));
+      const KeyCentre phKeyCenter = KeyCentre.cNat;
+      const Octave phOctave = Octave.zero;
+      const Instrument phInstrument = Instrument.piano;
+      const Scale phScale = Scale.major;
+      const PlayingMode phPlayingMode = PlayingMode.singleNote;
 
-    final AppSettingsService controller = AppSettingsService();
+      final AppSettingsService controller = AppSettingsService();
 
-
+    Future<dynamic> testInitSettings() async {
+      prefs = await SharedPreferences.getInstance();
+      await prefs.setString('keyCentre', phKeyCenter.name);
+      await prefs.setString('octave', phOctave.name);
+      await prefs.setString('instrument', phInstrument.name);
+      await prefs.setString('playingMode', phPlayingMode.name);
+      await prefs.setString('scale', phPlayingMode.name);
+      
+    }
+    
     test('Load Settings Function', () async {
+      await testInitSettings();
+
       AppSettings currentSettings = await controller.loadSettings();
+
       expect(phKeyCenter, currentSettings.keyCentre);
       expect(phOctave, currentSettings.octave);
       expect(phInstrument, currentSettings.instrument);
@@ -143,6 +152,8 @@ void main() {
 
 
     test('Save Settings Function', () async {
+      await testInitSettings();
+
       AppSettings currentSettings = await controller.loadSettings();
 
       KeyCentre selectedKeyCentre = (currentSettings.keyCentre != KeyCentre.cNat) ? KeyCentre.cNat : KeyCentre.cSh;
@@ -159,12 +170,13 @@ void main() {
         playingMode: selectedPlayingMode
       ));
 
-      expect(selectedKeyCentre, currentSettings.keyCentre);
-      expect(selectedScale, currentSettings.octave);
-      expect(selectedOctave, currentSettings.instrument);
-      expect(selectedInstrument, currentSettings.scale);
-      expect(selectedPlayingMode, currentSettings.playingMode);
+      AppSettings newSettings = await controller.loadSettings();
 
+      expect(selectedKeyCentre, newSettings.keyCentre);
+      expect(selectedScale, newSettings.scale);
+      expect(selectedOctave, newSettings.octave);
+      expect(selectedInstrument, newSettings.instrument);
+      expect(selectedPlayingMode, newSettings.playingMode);
 
       await controller.saveSettings(AppSettings(
         keyCentre: phKeyCenter, 
@@ -174,21 +186,15 @@ void main() {
         playingMode: phPlayingMode
       ));
 
-      expect(phKeyCenter, currentSettings.keyCentre);
-      expect(phScale, currentSettings.octave);
-      expect(phOctave, currentSettings.instrument);
-      expect(phInstrument, currentSettings.scale);
-      expect(phPlayingMode, currentSettings.playingMode);
+      AppSettings phSettings = await controller.loadSettings();
+
+      expect(phKeyCenter, phSettings.keyCentre);
+      expect(phScale, phSettings.scale);
+      expect(phOctave, phSettings.octave);
+      expect(phInstrument, phSettings.instrument);
+      expect(phPlayingMode, phSettings.playingMode);
 
     });
-
-
-
-    await prefs.setString('keyCentre', phKeyCenter.name);
-    await prefs.setString('octave', phOctave.name);
-    await prefs.setString('instrument', phInstrument.name);
-    await prefs.setString('playingMode', phPlayingMode.name);
-    await prefs.setString('scale', phScale.name);
 
   });
 }
