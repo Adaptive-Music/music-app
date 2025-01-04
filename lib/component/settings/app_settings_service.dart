@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:music_app/special/enums.dart';
-import 'package:music_app/page/settings/app_settings_model.dart';
+import 'package:music_app/component/settings/app_settings_model.dart';
 
 // Service class to handle saving and loading app settings
 class AppSettingsService {
@@ -40,7 +40,7 @@ class AppSettingsService {
       instrument: instrument,
       playingMode: playingMode,
     );
-    print('Loaded settings: $settings');
+    // print('Loaded settings: $settings');
     return settings;
   }
 
@@ -55,24 +55,7 @@ class AppSettingsService {
   }
 }
 
-List<PlayingMode> updateModeDrop (Scale selectedScale) {
-  if (selectedScale.name == Scale.pentatonicMajor.name || selectedScale.name == Scale.pentatonicMinor.name) {
-    print('Compared selected Scale is $selectedScale.name');
-    print('2 Modes');
-    return PlayingMode.values.where((mode) => mode.name != 'Triad Chord').toList();
-  }
-  print('3 Modes');
-  return PlayingMode.values;
-}
-
-PlayingMode updateModeSelect (Scale selectedScale, PlayingMode selectedPlayingMode) {
-  if (selectedScale.name == Scale.pentatonicMajor.name || selectedScale.name == Scale.pentatonicMinor.name) {
-    return (selectedPlayingMode.name == PlayingMode.triadChord.name) ? PlayingMode.singleNote : selectedPlayingMode;
-  }
-  return selectedPlayingMode;
-}
-
-const defaultSettings = AppSettings(
+AppSettings defaultSettings = AppSettings(
   keyCentre: KeyCentre.cNat,
   scale: Scale.major,
   octave: Octave.four,
