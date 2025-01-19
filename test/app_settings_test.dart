@@ -1,8 +1,9 @@
-import 'dart:ffi';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:music_app/component/settings/app_settings_model.dart';
 import 'package:music_app/component/settings/app_settings_service.dart';
+import 'package:music_app/component/settings/app_settings_utils.dart';
+import 'package:music_app/component/settings/app_settings_notifier.dart';
 import 'package:music_app/special/enums.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -143,11 +144,11 @@ void main() {
 
       AppSettings currentSettings = await controller.loadSettings();
 
-      expect(phKeyCenter, currentSettings.keyCentre);
-      expect(phOctave, currentSettings.octave);
-      expect(phInstrument, currentSettings.instrument);
-      expect(phScale, currentSettings.scale);
-      expect(phPlayingMode, currentSettings.playingMode);
+      expect(currentSettings.keyCentre, phKeyCenter);
+      expect(currentSettings.octave, phOctave);
+      expect(currentSettings.instrument, phInstrument);
+      expect(currentSettings.scale, phScale);
+      expect(currentSettings.playingMode, phPlayingMode);
     });
 
 
@@ -172,11 +173,12 @@ void main() {
 
       AppSettings newSettings = await controller.loadSettings();
 
-      expect(selectedKeyCentre, newSettings.keyCentre);
-      expect(selectedScale, newSettings.scale);
-      expect(selectedOctave, newSettings.octave);
-      expect(selectedInstrument, newSettings.instrument);
-      expect(selectedPlayingMode, newSettings.playingMode);
+
+      expect(newSettings.keyCentre, selectedKeyCentre);
+      expect(newSettings.scale, selectedScale);
+      expect(newSettings.octave, selectedOctave);
+      expect(newSettings.instrument, selectedInstrument);
+      expect(newSettings.playingMode, selectedPlayingMode);
 
       await controller.saveSettings(AppSettings(
         keyCentre: phKeyCenter, 
@@ -188,13 +190,139 @@ void main() {
 
       AppSettings phSettings = await controller.loadSettings();
 
-      expect(phKeyCenter, phSettings.keyCentre);
-      expect(phScale, phSettings.scale);
-      expect(phOctave, phSettings.octave);
-      expect(phInstrument, phSettings.instrument);
-      expect(phPlayingMode, phSettings.playingMode);
+      expect(phSettings.keyCentre, phKeyCenter);
+      expect(phSettings.scale, phScale);
+      expect(phSettings.octave, phOctave);
+      expect(phSettings.instrument, phInstrument);
+      expect(phSettings.playingMode, phPlayingMode);
 
     });
 
+  });
+
+  group('AppSettings Utils', () {
+
+    group('updateModeDrop Function', () {
+
+      test('updateModeDrop Function - 3 Modes', () {
+    
+      List<PlayingMode> majorDropList = updateModeDrop(Scale.major); 
+      expect(majorDropList.length, 3);
+
+      List<PlayingMode> minorDropList = updateModeDrop(Scale.minor); 
+      expect(minorDropList.length, 3);
+
+      List<PlayingMode> harMinorDropList = updateModeDrop(Scale.harmonicMinor); 
+      expect(harMinorDropList.length, 3);
+
+      });
+
+      test('updateModeDrop Function - 2 Modes', () {
+      
+        List<PlayingMode> pentaMajorDropList = updateModeDrop(Scale.pentatonicMajor); 
+        expect(pentaMajorDropList.length, 2);
+
+        List<PlayingMode> pentaMinorDropList = updateModeDrop(Scale.pentatonicMinor); 
+        expect(pentaMinorDropList.length, 2);
+
+      });
+
+    });
+
+    group('updateModeSelect Function', () {
+      PlayingMode singleMode = PlayingMode.singleNote; 
+      PlayingMode triadChord = PlayingMode.triadChord; 
+      PlayingMode powerChord = PlayingMode.powerChord; 
+
+      PlayingMode majorSingle = updateModeSelect(Scale.major, singleMode);
+      PlayingMode minorSingle = updateModeSelect(Scale.minor, singleMode);
+      PlayingMode harMinorSingle = updateModeSelect(Scale.harmonicMinor, singleMode);
+      PlayingMode pentaMajorSingle = updateModeSelect(Scale.pentatonicMajor, singleMode);
+      PlayingMode pentaMinorSingle = updateModeSelect(Scale.pentatonicMinor, singleMode);
+
+      PlayingMode majorTriad = updateModeSelect(Scale.major, triadChord);
+      PlayingMode minorTriad = updateModeSelect(Scale.minor, triadChord);
+      PlayingMode harMinorTriad = updateModeSelect(Scale.harmonicMinor, triadChord);
+      PlayingMode pentaMajorTriad = updateModeSelect(Scale.pentatonicMajor, triadChord);
+      PlayingMode pentaMinorTriad = updateModeSelect(Scale.pentatonicMinor, triadChord);
+
+      PlayingMode majorPower = updateModeSelect(Scale.major, powerChord);
+      PlayingMode minorPower = updateModeSelect(Scale.minor, powerChord);
+      PlayingMode harMinorPower = updateModeSelect(Scale.harmonicMinor, powerChord);
+      PlayingMode pentaMajorPower = updateModeSelect(Scale.pentatonicMajor, powerChord);
+      PlayingMode pentaMinorPower = updateModeSelect(Scale.pentatonicMinor, powerChord);
+
+      test('Retain same playingMode', () {
+        expect(majorSingle, singleMode);
+        expect(minorSingle, singleMode);
+        expect(harMinorSingle, singleMode);
+        expect(pentaMajorSingle, singleMode);
+        expect(pentaMinorSingle, singleMode);
+
+        expect(majorTriad, triadChord);
+        expect(minorTriad, triadChord);
+        expect(harMinorTriad, triadChord);
+
+        expect(majorPower, powerChord);
+        expect(minorPower, powerChord);
+        expect(harMinorPower, powerChord);
+        expect(pentaMajorPower, powerChord);
+        expect(pentaMinorPower, powerChord);
+      });
+
+      test('Switch to single playingMode', () {
+          expect(pentaMajorTriad, singleMode);
+          expect(pentaMinorTriad, singleMode);
+      });
+    
+    });
+    
+  });
+
+  group('AppSettingsNotifier', () {
+    late ProviderContainer container;
+    late AppSettingsNotifier notifier;
+    late AppSettingsService service;
+
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+      container = ProviderContainer();
+      notifier = container.read(appSettingsProvider.notifier);
+      service = AppSettingsService();
+    });
+
+    test('Initial state is default settings', () async {
+      final defaultSettings = AppSettings(
+        keyCentre: KeyCentre.cNat,
+        scale: Scale.major,
+        octave: Octave.four,
+        instrument: Instrument.piano,
+        playingMode: PlayingMode.singleNote,
+      );
+
+      expect(notifier.state.keyCentre, defaultSettings.keyCentre);
+      expect(notifier.state.scale, defaultSettings.scale);
+      expect(notifier.state.octave, defaultSettings.octave);
+      expect(notifier.state.instrument, defaultSettings.instrument);
+      expect(notifier.state.playingMode, defaultSettings.playingMode);
+    });
+
+    test('saveSettings updates the state', () async {
+      final newSettings = AppSettings(
+        keyCentre: KeyCentre.gNat,
+        scale: Scale.minor,
+        octave: Octave.two,
+        instrument: Instrument.acousticGuitar,
+        playingMode: PlayingMode.triadChord,
+      );
+
+      notifier.saveSettings(newSettings);
+      
+      expect(notifier.state.keyCentre, newSettings.keyCentre);
+      expect(notifier.state.scale, newSettings.scale);
+      expect(notifier.state.octave, newSettings.octave);
+      expect(notifier.state.instrument, newSettings.instrument);
+      expect(notifier.state.playingMode, newSettings.playingMode);
+    });
   });
 }
