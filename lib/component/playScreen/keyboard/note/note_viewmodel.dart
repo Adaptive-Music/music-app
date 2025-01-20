@@ -10,16 +10,16 @@ class NoteViewModel {
   late Rect bounds;
 
   void playNote() {
-    HapticFeedback.mediumImpact();  // Add haptic feedback
+    // HapticFeedback.mediumImpact();  // Add haptic feedback
     for (var i = 0; i < note.keyPitchNotes.length; i++) {
-      print('play midi notes');
+      // print('play midi notes');
     }
       playing = true;
   }
 
   void stopNote() {
     for (var i = 0; i < note.keyPitchNotes.length; i++) {
-      print('stop midi note');
+      // print('stop midi note');
     }
       playing = false;
   }

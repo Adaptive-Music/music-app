@@ -51,7 +51,7 @@ class AppSettingsService {
     await _prefs?.setString('instrument', settings.instrument.name);
     await _prefs?.setString('playingMode', settings.playingMode.name);
     await _prefs?.setString('scale', settings.scale.name);
-    print('Saved settings: $settings');
+    // print('Saved settings: $settings');
   }
 }
 

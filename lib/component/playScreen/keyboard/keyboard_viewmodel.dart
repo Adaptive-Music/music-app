@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:music_app/component/playScreen/keyboard/keyboard_model.dart';
 
 class KeyboardViewModel {
@@ -41,11 +43,22 @@ class KeyboardViewModel {
         rootNote + 12,
       ];
     }
-    print("Key - Scale: ${keyboard.scale.name}");
-    print("Key - Playing Mode: ${keyboard.playingMode.name}");
-    print("Key settings loaded");
     return notes;
     
+  }
+
+  List<List<List<int>>> buildOctScales() {
+    List<int> startNotes = [keyboard.octave.number + keyboard.keyCentre.key, keyboard.octave.number + keyboard.keyCentre.key + 12];
+    
+    List<List<List<int>>> octScales = [];
+    for (int startNote in startNotes) {
+      List<List<int>> octave = [];
+      for (int index in Iterable.generate(keyboard.scale.intervals.length)) {
+        octave.add(packNotes(index, startNote));
+      }
+      octScales.add(octave);
+    }
+    return octScales;
   }
 
 }

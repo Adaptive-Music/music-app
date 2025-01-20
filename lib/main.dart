@@ -8,6 +8,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +34,7 @@ class MyHomePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(settingsTitle, style: TextStyle(fontSize: 14)),
+        title: Text(settingsTitle, style: const TextStyle(fontSize: 14)),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),

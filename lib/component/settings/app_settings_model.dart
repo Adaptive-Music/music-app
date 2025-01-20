@@ -15,6 +15,4 @@ class AppSettings {
     required this.instrument,
     required this.playingMode,
   });
-
-
 }
